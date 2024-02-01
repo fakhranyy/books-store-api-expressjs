@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { Author, validateUpdateAuthor, validateCreateAuthor } = require("../models/Author");
+const {
+  Author,
+  validateUpdateAuthor,
+  validateCreateAuthor,
+} = require("../models/Author");
+const asyncHandler = require("express-async-handler");
 // * Http Methods / Http verbs
 // * 1st argument (url), 2nd argument (callback function -> in express we called it route handler)
 
@@ -11,14 +16,13 @@ const { Author, validateUpdateAuthor, validateCreateAuthor } = require("../model
  * @access public
  */
 
-router.get("/", async (req, res) => {
-  try {
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
     const authorList = await Author.find(); //* find All authors and assign it in (authorList)
     res.status(200).json(authorList);
-  } catch (error) {
-    console.log("something went wrong");
-  }
-});
+  })
+);
 
 /*
  * @desc   Get author by id
@@ -26,18 +30,17 @@ router.get("/", async (req, res) => {
  * @method GET
  * @access public
  */
-router.get("/:id", async (req, res) => {
-  try {
+router.get(
+  "/:id",
+  asyncHandler(async (req, res) => {
     const author = await Author.findById(req.params.id);
     if (author) {
       res.status(200).json(author);
     } else {
       res.status(404).json({ message: "author is not found" });
     }
-  } catch (error) {
-    console.log("some thing went wrong");
-  }
-});
+  })
+);
 
 /*
  * @desc   Create new author
@@ -45,12 +48,13 @@ router.get("/:id", async (req, res) => {
  * @method POST
  * @access public
  */
-router.post("/", async (req, res) => {
-  const { error } = validateCreateAuthor(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
-  }
-  try {
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
+    const { error } = validateCreateAuthor(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const author = new Author({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -61,11 +65,8 @@ router.post("/", async (req, res) => {
     const result = await author.save();
 
     res.status(201).json(result);
-  } catch (error) {
-    console.log("the error is " + error);
-    res.status(500).json({ message: "Something went wrong" });
-  }
-});
+  })
+);
 
 /*
  * @desc   update a author
@@ -73,13 +74,14 @@ router.post("/", async (req, res) => {
  * @method PUT
  * @access public
  */
-router.put("/:id", async (req, res) => {
-  const { error } = validateUpdateAuthor(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
-  }
+router.put(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const { error } = validateUpdateAuthor(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
 
-  try {
     const author = await Author.findByIdAndUpdate(
       req.params.id,
       {
@@ -93,11 +95,10 @@ router.put("/:id", async (req, res) => {
       { new: true }
     );
     res.status(200).json(author);
-  } catch (error) {
     console.log("the error is " + error);
     res.status(500).json({ message: "Something went wrong" });
-  }
-});
+  })
+);
 
 /*
  * @desc   delete an author
@@ -105,8 +106,9 @@ router.put("/:id", async (req, res) => {
  * @method DELETE
  * @access public
  */
-router.delete("/:id", async (req, res) => {
-  try {
+router.delete(
+  "/:id",
+  asyncHandler(async (req, res) => {
     const author = await Author.findById(req.body.id);
     if (author) {
       await Author.findByIdAndDelete(req.body.id);
@@ -114,10 +116,7 @@ router.delete("/:id", async (req, res) => {
     } else {
       res.status(404).json({ message: "author not found" });
     }
-  } catch (error) {
-    console.log("something went wrong");
-  }
-});
-
+  })
+);
 
 module.exports = router;

@@ -2,22 +2,29 @@ const express = require("express");
 const booksPath = require("./routes/booksRoutes");
 const authorsPath = require("./routes/authorsRoutes");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const logger = require("./middleware/logger");
 
+dotenv.config();
 // * connection to database
 mongoose
-  .connect("mongodb://localhost/bookStoreDB")
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("Database Connected"))
   .catch((err) => console.log("Connection failed..And the error is " + err));
 
 // * init app, this app icludes all http methods LIKE ( app.get(), app.post(), etc )
 const app = express();
-const port = 5000;
+const port = process.env.PORT;
 // * apply middlewares
 app.use(express.json());
+
+//? to know the http method in the current request & original route 
+//* Like -> POST http://localhost:5000/api/books 
+app.use(logger);
 
 //* Routes
 app.use("/api/books", booksPath);
 app.use("/api/authors", authorsPath);
 
 // Running the server
-app.listen(port, () => console.log("Server is running on port " + port)); //* port , callback function
+app.listen(port, () => console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${port} `)); //* port , callback function

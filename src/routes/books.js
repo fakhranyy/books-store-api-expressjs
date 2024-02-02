@@ -10,7 +10,7 @@ const asyncHandler = require("express-async-handler");
 // * Http Methods / Http verbs
 // * 1st argument (url), 2nd argument (callback function -> in express we called it route handler)
 
-/*
+/**
  * @desc   Get all books
  * @route  /api/books
  * @method GET
@@ -19,12 +19,12 @@ const asyncHandler = require("express-async-handler");
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const books = await Book.find();
+    const books = await Book.find().populate("author", ["_id","firstName","lastName"]);
     res.json(books); // send response as json file
   })
 );
 
-/*
+/**
  * @desc   Get book by id
  * @route  /api/book/:id
  * @method GET
@@ -33,7 +33,7 @@ router.get(
 router.get(
   "/:id",
   asyncHandler(async (req, res) => {
-    const book = await Book.findById(req.params.id);
+    const book = await Book.findById(req.params.id).populate("author");
     if (book) {
       res.status(200).json(book);
     } else {
@@ -42,7 +42,7 @@ router.get(
   })
 );
 
-/*
+/**
  * @desc   Create new book
  * @route  /api/books
  * @method POST
@@ -57,7 +57,7 @@ router.post(
     }
     const book = new Book({
       title: req.body.title,
-      autor: req.body.author,
+      author: req.body.author,
       description: req.body.description,
       price: req.body.price,
       cover: req.body.cover,
@@ -67,7 +67,7 @@ router.post(
   })
 );
 
-/*
+/**
  * @desc   update a book
  * @route  /api/books/:id
  * @method PUT
@@ -97,7 +97,7 @@ router.put(
   })
 );
 
-/*
+/**
  * @desc   delete a book
  * @route  /api/books/:id
  * @method DELETE

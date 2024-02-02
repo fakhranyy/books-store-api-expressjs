@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const joi = require("joi");
+const Joi = require("joi");
 
 const AuthorSchema = new mongoose.Schema(
   {
@@ -33,28 +33,28 @@ const AuthorSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-// * from here we'll build collection in our DB (collection name, collection schema)
+
 const Author = mongoose.model("Author", AuthorSchema);
 
-//* validate create book
+// Validate Create Author
 function validateCreateAuthor(obj) {
-  const schema = joi.object({
-    firstName: joi.string().trim().min(3).max(200).required(),
-    lastName: joi.string().trim().min(3).max(200).required(),
-    nationality: joi.string().trim().min(3).max(200).required(),
-    image: joi.string(),
+  const schema = Joi.object({
+    firstName: Joi.string().trim().min(3).max(200).required(),
+    lastName: Joi.string().trim().min(3).max(200).required(),
+    nationality: Joi.string().trim().min(2).max(100).required(),
+    image: Joi.string(),
   });
 
   return schema.validate(obj);
 }
 
-//* validate update book
+// Validate Update Author
 function validateUpdateAuthor(obj) {
-  const schema = joi.object({
-    firstName: joi.string().trim().min(3).max(200),
-    lastName: joi.string().trim().min(3).max(200),
-    nationality: joi.string().trim().min(3).max(200),
-    image: joi.string(),
+  const schema = Joi.object({
+    firstName: Joi.string().trim().min(3).max(200),
+    lastName: Joi.string().trim().min(3).max(200),
+    nationality: Joi.string().trim().min(2).max(100),
+    image: Joi.string(),
   });
 
   return schema.validate(obj);
@@ -62,6 +62,6 @@ function validateUpdateAuthor(obj) {
 
 module.exports = {
   Author,
-  validateUpdateAuthor,
   validateCreateAuthor,
+  validateUpdateAuthor,
 };

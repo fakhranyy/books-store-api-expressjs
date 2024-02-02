@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const asyncHandler = require("express-async-handler");
 const {
   Author,
   validateUpdateAuthor,
   validateCreateAuthor,
 } = require("../models/Author");
-const asyncHandler = require("express-async-handler");
 // * Http Methods / Http verbs
 // * 1st argument (url), 2nd argument (callback function -> in express we called it route handler)
 
-/*
+/**
  * @desc   Get all authors
  * @route  /api/authors
  * @method GET
@@ -24,7 +24,7 @@ router.get(
   })
 );
 
-/*
+/**
  * @desc   Get author by id
  * @route  /api/author/:id
  * @method GET
@@ -42,7 +42,7 @@ router.get(
   })
 );
 
-/*
+/**
  * @desc   Create new author
  * @route  /api/authors
  * @method POST
@@ -68,7 +68,7 @@ router.post(
   })
 );
 
-/*
+/**
  * @desc   update a author
  * @route  /api/authors/:id
  * @method PUT
@@ -100,7 +100,7 @@ router.put(
   })
 );
 
-/*
+/**
  * @desc   delete an author
  * @route  /api/author/:id
  * @method DELETE

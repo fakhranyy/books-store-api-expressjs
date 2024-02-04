@@ -2,12 +2,15 @@ const express = require("express");
 const booksPath = require("./routes/books");
 const authorsPath = require("./routes/authors");
 const authPath = require("./routes/auth");
+const usersPath = require("./routes/users")
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const logger = require("./middleware/logger");
 const { notFound, errorHandler } = require("./middleware/errors");
 
+//* that let us use the .env variables
 dotenv.config();
+
 // * connection to database
 mongoose
   .connect(process.env.MONGO_URL)
@@ -28,6 +31,9 @@ app.use(logger);
 app.use("/api/books", booksPath);
 app.use("/api/authors", authorsPath);
 app.use("/api/auth", authPath);
+app.use("/api/users", usersPath);
+
+
 //* Error handling middleware
 app.use(notFound);
 

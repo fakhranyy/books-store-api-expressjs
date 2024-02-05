@@ -1,25 +1,16 @@
 const express = require("express");
-const booksPath = require("./routes/books");
-const authorsPath = require("./routes/authors");
-const authPath = require("./routes/auth");
-const usersPath = require("./routes/users")
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const logger = require("./middleware/logger");
 const { notFound, errorHandler } = require("./middleware/errors");
+const connectToDB = require("./config/db");
+require("dotenv").config(); //* that let us use the .env variables
 
-//* that let us use the .env variables
-dotenv.config();
 
-// * connection to database
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log("Connected To MongoDB"))
-  .catch((err) => console.log("Connection failed..And the error is " + err));
+// * connection to database function
+connectToDB();
 
 // * init app, this app icludes all http methods LIKE ( app.get(), app.post(), etc )
 const app = express();
-const port = process.env.PORT;
+
 // * apply middlewares
 app.use(express.json());
 
@@ -28,20 +19,19 @@ app.use(express.json());
 app.use(logger);
 
 //* Routes
-app.use("/api/books", booksPath);
-app.use("/api/authors", authorsPath);
-app.use("/api/auth", authPath);
-app.use("/api/users", usersPath);
+app.use("/api/books", require("./routes/books"));
+app.use("/api/authors", require("./routes/authors"));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/users", require("./routes/users"));
 
 
 //* Error handling middleware
 app.use(notFound);
-
 app.use(errorHandler);
 
-// Running the server
-app.listen(port, () =>
+//* Running the server
+app.listen(process.env.PORT, () =>
   console.log(
-    `Server is running in ${process.env.NODE_ENV} mode on port ${port} `
+    `Server is running in ${process.env.NODE_ENV} mode on port ${process.env.PORT} `
   )
 ); //* port , callback function

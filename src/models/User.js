@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
+const jwt = require('jsonwebtoken');
+
 
 const UserSchema = new mongoose.Schema(
   {
@@ -31,6 +33,11 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Generate jwt token
+UserSchema.methods.generateToken = function(){
+ return jwt.sign({id: this._id, isAdmin: this.isAdmin},process.env.SECRET_KEY,{expiresIn: "4d"});
+}
 
 // User Model .. it'll create collection with "user" name and criteria like "UserSchema"
 const User = mongoose.model("User", UserSchema);

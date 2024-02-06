@@ -13,6 +13,7 @@ const app = express();
 
 // * apply middlewares
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
 //? to know the http method in the current request & original route
 //* Like -> POST http://localhost:5000/api/books

@@ -21,17 +21,17 @@
 
 
 ## Features in detail :
-- Authentication system
-- Authorization system
-- User management
-- Book management
-- Author management
-- All books by the same author
-- Author of a group of books
-- Roles ( admin - user )
-- Forgot & Reset Password
-- Email verification
-- Pagination
+- **Authentication system**
+- **Authorization system**
+- **User management**
+- **Book management**
+- **Author management**
+- **All books by the same author**
+- **Author of a group of books**
+- **Roles ( admin - user )**
+- **Forgot & Reset Password**
+- **Email verification**
+- **Pagination**
 
 
 ## Prerequisites
